@@ -1,61 +1,95 @@
-# misis_XMiS
+# FinancialGuide
 
-This template should help get you started developing with Vue 3 in Vite.
+Веб-приложение для анализа финансов и доходов, разработанное в рамках хакатона VTB API 2024.
 
-## Recommended IDE Setup
+[![Netlify](https://img.shields.io/badge/deploy-netlify-00C7B7)](https://xmisfinancialguide.netlify.app/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Технологии
 
-## Type Support for `.vue` Imports in TS
+- TypeScript
+- Vue3 (Composition API)
+- Vue-Router
+- vue-chart.js
+- SCSS
+- Vite
+- ESLint + Prettier
+- Netlify (деплой)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Архитектурные решения
 
-## Customize configuration
+### Компонентная структура
+Компоненты разбиты по доменным директориям: `feature_main` и `feature_financy`. Переиспользуемые UI-примитивы вынесены в `components/ui`.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Визуализация данных через Chart.js
+Страница анализа доходов строит два линейных графика через `vue-chart.js`: динамика фактических доходов по месяцам и сравнение с потенциальным доходом от инвестиций. Настройки осей, легенды и цветовой схемы вынесены в `src/utils/chartSettings.ts`.
 
-## Project Setup
+### Интеграция с Banking API
+Приложение ориентировано на работу с API банкинга. Токен доступа передаётся через переменную окружения `VITE_API_ACCESS_TOKEN`, которая настраивается отдельно для dev- и production-сборок через файлы `.env.dev` и `.env.production`.
 
-```sh
-yarn
+### Разделение стилей по фичам
+SCSS-файлы структурированы зеркально компонентам: `feature_main/` и `feature_financy/`. Глобальная цветовая палитра вынесена в `colors.scss`, базовые сбросы и типографика — в `base.scss`.
+
+## Структура проекта
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
-yarn dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-yarn build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-yarn test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-yarn test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-yarn build
-yarn test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-yarn lint
+├── .github/
+├── .vscode/
+├── cypress/                         
+├── public/
+├── src/
+│   ├── assets/
+│   │   ├── images/
+│   │   └── styles/
+│   │       ├── base.scss
+│   │       ├── colors.scss           
+│   │       ├── main.scss
+│   │       ├── feature_financy/
+│   │       │   ├── financy_main.scss
+│   │       │   └── media/
+│   │       │       └── media_financy_main.scss
+│   │       └── feature_main/
+│   │           ├── main_footer.scss
+│   │           ├── main_header.scss
+│   │           ├── main_main.scss
+│   │           ├── main_modal.scss
+│   │           └── media/
+│   │               ├── media_main_header.scss
+│   │               └── media_main_main.scss
+│   ├── components/
+│   │   ├── feature_financy/
+│   │   │   └── FinancyAds.vue         # Блок рекомендаций по инвестициям
+│   │   ├── feature_main/
+│   │   │   ├── CustomFooter.vue
+│   │   │   ├── CustomHeader.vue
+│   │   │   ├── MainInfo.vue           # Баланс, доходы, реквизиты, детали счёта
+│   │   │   └── ModalAuth.vue          # Модальное окно авторизации
+│   │   └── ui/
+│   │       └── MainCard.vue          
+│   ├── router/
+│   │   └── index.ts                  
+│   ├── stores/            
+│   ├── utils/
+│   │   └── chartSettings.ts           
+│   ├── views/
+│   │   ├── FinancyView.vue            # Анализ доходов с линейными графиками
+│   │   ├── HomeView.vue               # Главная страница (баланс, авторизация)
+│   │   └── NotFound.vue              # Страница 404
+│   ├── App.vue
+│   └── main.ts
+├── .editorconfig
+├── .env.dev                           # VITE_API_ACCESS_TOKEN (development)
+├── .env.production                    # VITE_API_ACCESS_TOKEN (production)
+├── .gitignore
+├── .prettierrc.json
+├── cypress.config.ts
+├── env.d.ts
+├── eslint.config.js
+├── index.html
+├── package.json
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── tsconfig.vitest.json
+├── vite.config.ts
+├── vitest.config.ts
+└── yarn.lock
 ```
